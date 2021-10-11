@@ -1,5 +1,6 @@
 package com.example.b2wmarketplace.controller;
 
+import com.example.b2wmarketplace.exception.BadParamException;
 import com.example.b2wmarketplace.model.Product;
 import com.example.b2wmarketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,19 @@ public class B2wController {
     }
 
     @GetMapping(value="/item")
-    public ResponseEntity<List<Product>> getProductByDate(@RequestParam("begindate") @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate, @RequestParam("finaldate") @DateTimeFormat(pattern="dd-MM-yyyy") Date finalDate){
-        List<Product> products = repository.findProductByDateBetween(beginDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDateTime(), finalDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDateTime());
-        return ResponseEntity.ok().body(products);
+    public ResponseEntity<List<Product>> getProductByDate(
+            @RequestParam(value = "begindate", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
+            @RequestParam(value="finaldate", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date finalDate
+    ){
+        try{
+            List<Product> products = repository.findProductByDateBetween(
+                    beginDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    finalDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+            return ResponseEntity.ok().body(products);
+        }catch(RuntimeException e){
+            throw new BadParamException("need begindate and finadate parameter");
+        }
+
     }
 
 }
