@@ -6,7 +6,6 @@ filters by data.
 The application is based on the following projects:
 
 * **Spring boot** 2.5.5
-* **Mockito** 3.8.0
 * **Maven** 3.8.1
 * **Project Lombok** 1.18.20
 * **Java** 11
