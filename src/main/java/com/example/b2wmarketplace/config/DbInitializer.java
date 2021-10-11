@@ -35,13 +35,13 @@ public class DbInitializer {
 
 
     @Bean
-    public boolean instantiateDatabase(RestTemplateBuilder builder){
+    public boolean instantiateDatabase(){
         final RestTemplate restTemplate = new RestTemplate();
         final ResponseEntity<List<Product>> response = restTemplate.exchange(
                 URL_MOCK_PRODUCT,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Product>>(){});
+                new ParameterizedTypeReference<>(){});
         List<Product> productMock = response.getBody();
 
 
